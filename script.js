@@ -1,8 +1,10 @@
 const pup = require('puppeteer');
 const fs = require('fs');
-
+const Extractor = require("./extractData.js")
+const prompts = require('prompts');
+const questions = require("./questions.js")
 class Bob {
-    
+
     constructor(parts) {
         this.searchButtonOpenSearchBar = "body > div.page-wrapper > header > div > div.header.content > div.header-right-block > div.search-container > span"
         this.searchBar = "#search"
@@ -11,7 +13,6 @@ class Bob {
     }
 
     start = async () => {
-        console.clear()
         this.handleOutputs({
             message: "The process has started.",
             type: "success"
@@ -145,19 +146,19 @@ class Bob {
         } catch (e) {
             console.log(e)
         }
-        let cardinal;
+        let cardeal;
         if (imageNumber == 1) {
-            cardinal = "st"
+            cardeal = "st"
         } else if (imageNumber == 2) {
-            cardinal = "nd"
+            cardeal = "nd"
         } else {
-            cardinal = "th"
+            cardeal = "th"
         }
         this.handleOutputs({
             message: `The ${
-            imageNumber == null ? "unique" : imageNumber+cardinal
+            imageNumber == null ? "unique" : imageNumber+cardeal
         } image of ${partNumber} ${imageNumber == null || imageNumber == 1 ? "was" : "were"} saved successfuly as ${imageName}!`,
-        type: "success"
+            type: "success"
         })
     }
 
@@ -234,87 +235,12 @@ class Bob {
 
 }
 
-const bob = new Bob([
-    {
-        partNumber: "619021",
-        error: false,
-        searchAgain: 0
-    },
-    {
-        partNumber: "1321607",
-        error: false,
-        searchAgain: 0
-    },
-    {
-        partNumber: "1321608",
-        error: false,
-        searchAgain: 0
-    },
-    {
-        partNumber: "1614765",
-        error: false,
-        searchAgain: 0
-    },
-    {
-        partNumber: "3974518",
-        error: false,
-        searchAgain: 0
-    },
-    {
-        partNumber: "3974945",
-        error: false,
-        searchAgain: 0
-    },
-    {
-        partNumber: "3975337",
-        error: false,
-        searchAgain: 0
-    },
-    {
-        partNumber: "3975441",
-        error: false,
-        searchAgain: 0
-    },
-    {
-        partNumber: "6512026",
-        error: false,
-        searchAgain: 0
-    },
-    {
-        partNumber: "54354",
-        error: false,
-        searchAgain: 0
-    },
-    {
-        partNumber: "6515007",
-        error: false,
-        searchAgain: 0
-    },
-    {
-        partNumber: "6516229",
-        error: false,
-        searchAgain: 0
-    },
-    {
-        partNumber: "6516722",
-        error: false,
-        searchAgain: 0
-    },
-    {
-        partNumber: "6518200",
-        error: false,
-        searchAgain: 0
-    },
-    {
-        partNumber: "6532127",
-        error: false,
-        searchAgain: 0
-    },
-    {
-        partNumber: "6534111",
-        error: false,
-        searchAgain: 0
-    }
-])
-bob.start()
+prompts(questions)
+.then(answers=>{
+    const extractor = new Extractor(`/${answers.localeFile}.xlsx`, answers.titlePartNumbers)
+    const dataObject = extractor.objectDataDone()
+    const bob = new Bob(dataObject)
+    bob.start()
+})
+
 

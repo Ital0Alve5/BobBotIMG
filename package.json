@@ -10,6 +10,8 @@
   "author": "Ítalo Alves de Paula e Silva (italo_alves_@outlook.com)",
   "license": "ISC",
   "dependencies": {
+    "node-xlsx": "^0.17.2",
+    "prompts": "^2.4.2",
     "puppeteer": "^10.4.0"
   }
 }
