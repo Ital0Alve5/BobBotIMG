@@ -25,15 +25,15 @@ module.exports = class Extractor {
         return noUndefined
     }
 
-    removeDuplicates = (partNumbers)=>{
+    removeDuplicates = (partNumbers) => {
         return [...new Set(partNumbers)]
     }
 
     removeUndefined = (partNumbers) => {
         const noUndefined = partNumbers.filter(element => {
             return element !== undefined;
-         })
-         return noUndefined
+        })
+        return noUndefined
     }
 
     buildObject = (arrayOfPartNumbers) => {
@@ -52,6 +52,3 @@ module.exports = class Extractor {
         return this.buildObject(this.extractPartNumbers())
     }
 }
-
-// const e = new Extractor("/teste.xlsx", "Código de Produto")
-// console.log(e.extractPartNumbers())

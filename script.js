@@ -1,8 +1,7 @@
 const pup = require('puppeteer');
 const fs = require('fs');
 const Extractor = require("./extractData.js")
-const prompts = require('prompts');
-const questions = require("./questions.js")
+const makeQuestions = require('./makeQuestions');
 class Bob {
 
     constructor(parts) {
@@ -13,11 +12,11 @@ class Bob {
     }
 
     start = async () => {
-        this.handleOutputs({
+        Bob.handleOutputs({
             message: "The process has started.",
             type: "success"
         })
-        this.handleOutputs({
+        Bob.handleOutputs({
             message: "Be sure if your internet connection is estable.",
             type: "warning"
         })
@@ -46,7 +45,7 @@ class Bob {
     searchPartNumber = async (page, part) => {
         try {
             await page.goto("https://www.bobcatparts.com/")
-            this.handleOutputs({
+            Bob.handleOutputs({
                 message: `Searching for ${part.partNumber}...`,
                 type: "search"
             })
@@ -154,7 +153,7 @@ class Bob {
         } else {
             cardeal = "th"
         }
-        this.handleOutputs({
+        Bob.handleOutputs({
             message: `The ${
             imageNumber == null ? "unique" : imageNumber+cardeal
         } image of ${partNumber} ${imageNumber == null || imageNumber == 1 ? "was" : "were"} saved successfuly as ${imageName}!`,
@@ -162,7 +161,7 @@ class Bob {
         })
     }
 
-    handleOutputs = (output) => {
+    static handleOutputs = (output) => {
         switch (output.type) {
             case "search":
                 console.log("                         ")
@@ -191,17 +190,17 @@ class Bob {
             return part.error === true
         })
         const error = partsWithError.length
-        this.handleOutputs({
+        Bob.handleOutputs({
             message: `Some partNumber${error > 1 ? 's' : ''} didn't match any:`,
             type: "warning"
         })
         partsWithError.forEach(partWithError => {
-            this.handleOutputs({
+            Bob.handleOutputs({
                 message: partWithError.partNumber,
                 type: "error"
             })
         })
-        this.handleOutputs({
+        Bob.handleOutputs({
             message: `Check if ${error > 1 ? 'those' : 'that'} partNumber${error > 1? 's' : ''} ${error > 1 ? 'are' : 'is'} right.`,
             type: "warning"
         })
@@ -225,7 +224,7 @@ class Bob {
 
     handleVisualError = async (error, part) => {
         const putPartNumberInErrorMessage = error.replace("Your search", part.partNumber)
-        this.handleOutputs({
+        Bob.handleOutputs({
             message: putPartNumberInErrorMessage,
             type: "error"
         })
@@ -235,12 +234,14 @@ class Bob {
 
 }
 
-prompts(questions)
-.then(answers=>{
-    const extractor = new Extractor(`/${answers.localeFile}.xlsx`, answers.titlePartNumbers)
-    const dataObject = extractor.objectDataDone()
-    const bob = new Bob(dataObject)
-    bob.start()
-})
-
-
+(async () => {
+    const answers = await makeQuestions()
+    const fileAnswer = answers[0].xlsxFile
+    if (answers[0].xlsxFile !== "OK") {
+        const titleAnswer = answers[1].title
+        const extractor = new Extractor(`/${fileAnswer}`, titleAnswer)
+        const dataObject = extractor.objectDataDone()
+        const bob = new Bob(dataObject)
+        bob.start()
+    }
+})()

@@ -1,6 +1,4 @@
-
-module.exports = [
-  {
+module.exports = [{
     type: 'text',
     name: 'localeFile',
     message: 'Digite o nome do arquivo sem a extensão ".xlsx"',
