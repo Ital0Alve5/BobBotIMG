@@ -2,7 +2,7 @@
 
 # Clone este repositório
 
-    git clone <https://github.com/Ital0Alve5/BobBotIMG>
+    git clone https://github.com/Ital0Alve5/BobBotIMG
 
 # Utilização
 
