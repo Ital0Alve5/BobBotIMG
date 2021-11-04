@@ -2,10 +2,10 @@
   "name": "bobbotimg",
   "version": "1.0.0",
   "description": "Robô que procura e faz o download de imagens no site https://bobcatparts.com referentes à peças identificadas por um código único especificado em uma planilha.",
-  "main": "index.js",
+  "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "bobimg": "node script.js"
+    "bobimg": "node app.js"
   },
   "author": "Ítalo Alves de Paula e Silva (italo_alves_@outlook.com)",
   "license": "ISC",
