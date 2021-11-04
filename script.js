@@ -1,6 +1,6 @@
 const pup = require('puppeteer');
 const fs = require('fs');
-const Extractor = require("./extractData.js")
+const Extractor = require("./extractData.js");
 const makeQuestions = require('./makeQuestions');
 class Bob {
 
@@ -141,7 +141,11 @@ class Bob {
     saveImage = (partNumber, imageNumber, contentBuffer) => {
         const imageName = `${partNumber}${imageNumber !== null ? '-'+imageNumber : ''}.jpg`
         try {
-            fs.writeFileSync(imageName, contentBuffer, 'base64');
+            fs.writeFileSync(imageName, contentBuffer, 'base64')
+            const moveTo = `./images/${imageName}`
+            fs.rename(imageName, moveTo, err => {
+                if (err) console.log(err)
+            });
         } catch (e) {
             console.log(e)
         }
